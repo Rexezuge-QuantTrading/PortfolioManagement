@@ -1,4 +1,4 @@
-service: PortfolioManagement
+service: QuantTrading-PortfolioManagement
 provider:
   name: aws
   runtime: nodejs24.x
