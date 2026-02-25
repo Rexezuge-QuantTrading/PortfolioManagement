@@ -1,8 +1,6 @@
-exports.hello = async (_event: never) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Go Serverless v4! Your function executed successfully!',
-    }),
-  };
+import { APIGatewayProxyHandler } from 'aws-lambda';
+import { router } from '@/api/router';
+
+export const api: APIGatewayProxyHandler = async (event, context) => {
+  return router(event, context);
 };
