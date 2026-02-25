@@ -1,17 +1,99 @@
-# "service" is the name of this project. This will also be added to your AWS resource names.
 service: PortfolioManagement
-
 provider:
   name: aws
-  runtime: nodejs20.x
-  # Uncomment to easily set up a custom domain. Read the docs for more details:
-  # https://www.serverless.com/framework/docs/providers/aws/guide/domains
-  # domain: api.example.com
-
+  runtime: nodejs24.x
+  architecture: x86_64
+  region: '${env:AWS_REGION}'
+  versionFunctions: false
+  stackName: '${self:service}'
+  role:
+    'Fn::GetAtt':
+      - ExecutionRole
+      - Arn
+  logRetentionInDays: 30
+  environment:
+    ACTIVITY_TABLE: '${self:service}-Activity'
+    PORTFOLIO_TABLE: '${self:service}-Portfolio'
 functions:
-  hello:
-    handler: handler.hello
-    events:
-      - httpApi:
-          path: /
-          method: get
+  api:
+    handler: src/handler.api
+    name: '${self:service}-API'
+    timeout: 60
+    reservedConcurrency: 0
+    url:
+      cors: true
+resources:
+  Resources:
+    ExecutionRole:
+      Type: 'AWS::IAM::Role'
+      Properties:
+        RoleName: '${self:service}-ExecutionRole'
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: lambda.amazonaws.com
+              Action: 'sts:AssumeRole'
+        ManagedPolicyArns:
+          - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+        Policies:
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'dynamodb:Query'
+                  - 'dynamodb:Scan'
+                  - 'dynamodb:GetItem'
+                  - 'dynamodb:PutItem'
+                  - 'dynamodb:UpdateItem'
+                  - 'dynamodb:DeleteItem'
+                Resource:
+                  - 'Fn::GetAtt':
+                      - ActivityTable
+                      - Arn
+                  - 'Fn::GetAtt':
+                      - PortfolioTable
+                      - Arn
+    ActivityTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: '${self:provider.environment.ACTIVITY_TABLE}'
+        AttributeDefinitions:
+          - AttributeName: ts
+            AttributeType: N
+        KeySchema:
+          - AttributeName: ts
+            KeyType: HASH
+        BillingMode: PROVISIONED
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TimeToLiveSpecification:
+          AttributeName: dynamoTTL
+          Enabled: true
+    PortfolioTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: '${self:provider.environment.PORTFOLIO_TABLE}'
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: N
+          - AttributeName: symbol
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: symbol
+            KeyType: RANGE
+        BillingMode: PROVISIONED
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+useDotenv: true
+build:
+  esbuild:
+    bundle: true
+    minify: true
+    sourcemap: false
