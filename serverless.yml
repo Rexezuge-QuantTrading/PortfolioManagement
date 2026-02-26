@@ -19,7 +19,6 @@ functions:
     handler: src/handler.api
     name: '${self:service}-API'
     timeout: 60
-    reservedConcurrency: 0
     url:
       cors: true
 resources:
