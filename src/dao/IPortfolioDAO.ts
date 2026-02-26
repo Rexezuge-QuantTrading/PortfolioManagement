@@ -1,0 +1,3 @@
+class IPortfolioDAO {}
+
+export { IPortfolioDAO };

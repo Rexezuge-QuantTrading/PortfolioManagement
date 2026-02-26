@@ -1,0 +1,3 @@
+class IActivityDAO {}
+
+export { IActivityDAO };
