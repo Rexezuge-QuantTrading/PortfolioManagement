@@ -14,11 +14,15 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.998.x",
     "@aws-sdk/lib-dynamodb": "^3.998.x",
+    "express": "^5.2.x",
+    "reflect-metadata": "^0.2.x",
     "swagger-ui-dist": "^5.31.x",
+    "tsyringe": "^4.10.x",
     "uuid": "^13.0.x"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.x",
+    "@types/express": "^5.0.x",
     "@types/node": "^25.3.x",
     "eslint": "^10.0.x",
     "eslint-config-prettier": "^10.1.x",

@@ -16,7 +16,7 @@ provider:
     PORTFOLIO_TABLE: '${self:service}-Portfolio'
 functions:
   api:
-    handler: src/handler.api
+    handler: src/app.app
     name: '${self:service}-API'
     timeout: 60
     url:

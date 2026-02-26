@@ -1,3 +1,3 @@
-class IActivityDAO {}
+abstract class IActivityDAO {}
 
 export { IActivityDAO };
