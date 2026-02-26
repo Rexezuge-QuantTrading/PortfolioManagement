@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.998.x",
-    "@aws-sdk/lib-dynamodb": "^3.997.x",
+    "@aws-sdk/lib-dynamodb": "^3.998.x",
     "swagger-ui-dist": "^5.31.x",
     "uuid": "^13.0.x"
   },
