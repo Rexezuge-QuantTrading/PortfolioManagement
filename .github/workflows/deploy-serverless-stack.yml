@@ -1,5 +1,7 @@
 # $version: v1-1771379747
 name: Deploy Serverless Stack
+permissions:
+  contents: read
 
 on:
   push:
