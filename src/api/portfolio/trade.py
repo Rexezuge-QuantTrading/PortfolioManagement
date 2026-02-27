@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
-from src.schema.Trade import TradeRequest, TradeResponse
+from src.schema.trade import TradeRequest, TradeResponse
 from easytrader.remoteclient import RemoteClient, use  # type: ignore
 
 router: APIRouter = APIRouter()
