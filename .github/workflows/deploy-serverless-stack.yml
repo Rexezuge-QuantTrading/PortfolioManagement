@@ -1,4 +1,4 @@
-# $version: v2-1772208128
+# $version: v2-1772208516
 name: Deploy Serverless Stack
 permissions:
   contents: read
@@ -21,7 +21,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: 'npm'
+
+      - name: Install Serverless CLI
+        run: npm install -g serverless
 
       - name: Dump DOT_ENV to Repository
         run: |
@@ -36,7 +38,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           SERVERLESS_LICENSE_KEY: ${{ secrets.SERVERLESS_LICENSE_KEY }}
-        run: npx serverless deploy
+        run: serverless deploy
 
   cleanup-deployment-bucket:
     name: Cleanup Deployment Bucket
