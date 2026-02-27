@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
-from schema.Trade import TradeRequest, TradeResponse
+from src.schema.Trade import TradeRequest, TradeResponse
 
 router: APIRouter = APIRouter()
 
