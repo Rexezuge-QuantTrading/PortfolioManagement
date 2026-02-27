@@ -10,4 +10,4 @@ class TradeResponse(BaseModel):
     name: str = "John"
 
     class Config:
-        orm_mode = True
+        from_attributes = True

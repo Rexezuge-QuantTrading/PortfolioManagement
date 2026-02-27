@@ -1,4 +1,3 @@
-from decimal import Decimal
 from fastapi import APIRouter, HTTPException, status, Depends
 from typing import List
 from src.schema.portfolios import ListPortfoliosRequest, ListPortfoliosResponse
