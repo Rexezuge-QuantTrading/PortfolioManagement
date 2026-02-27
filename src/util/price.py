@@ -12,6 +12,6 @@ class PriceUtil:
 
     @staticmethod
     def getActualSecurityValue(storedQuantity: int, storedAvgCostBasis: int) -> Decimal:
-        return (
-            Decimal(storedQuantity) * Decimal(storedAvgCostBasis) / Decimal(1_0000_0000)
-        )
+        return PriceUtil.getActualQuantity(
+            storedQuantity
+        ) * PriceUtil.getActualCostBasis(storedAvgCostBasis)
