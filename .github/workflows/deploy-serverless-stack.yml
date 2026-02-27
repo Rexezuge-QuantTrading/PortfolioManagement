@@ -1,4 +1,4 @@
-# $version: v1-1771379747
+# $version: v2-1772208128
 name: Deploy Serverless Stack
 permissions:
   contents: read
@@ -31,15 +31,12 @@ jobs:
         env:
           DOT_ENV: ${{ vars.DOT_ENV }}
 
-      - name: Install Dependencies
-        run: npm install
-
       - name: Deploy Stack to AWS
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           SERVERLESS_LICENSE_KEY: ${{ secrets.SERVERLESS_LICENSE_KEY }}
-        run: npm run deploy
+        run: npx serverless deploy
 
   cleanup-deployment-bucket:
     name: Cleanup Deployment Bucket
