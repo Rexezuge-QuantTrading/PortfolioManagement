@@ -19,6 +19,8 @@ functions:
     handler: src/main.handler
     name: '${self:service}-API'
     timeout: 60
+    url:
+      cors: true
 resources:
   Resources:
     ExecutionRole:
