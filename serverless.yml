@@ -99,3 +99,4 @@ custom:
     exclude:
       - boto3
       - botocore
+      - uvicorn

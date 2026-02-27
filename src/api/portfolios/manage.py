@@ -4,6 +4,7 @@ from typing import List
 from src.schema.portfolios import ListPortfoliosRequest, ListPortfoliosResponse
 from src.repository.portfolio import PortfolioRepository
 from src.model.portfolio import Portfolio
+from src.core.config import settings
 
 router: APIRouter = APIRouter()
 
@@ -17,7 +18,7 @@ def list_portfolios(
     request: ListPortfoliosRequest = Depends(),
 ) -> ListPortfoliosResponse:
     portfolioRepository: PortfolioRepository = PortfolioRepository(
-        "QuantTrading-PortfolioManagement-Portfolio", "ap-northeast-1"
+        settings.portfolio_table, settings.aws_region
     )
     portfolios: List[Portfolio] = portfolioRepository.get_all_portfolios()
     ret_portfolios_map: dict[int, ListPortfoliosResponse.Portfolio] = {}
