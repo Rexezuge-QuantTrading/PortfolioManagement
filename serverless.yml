@@ -1,7 +1,7 @@
 service: QuantTrading-PortfolioManagement
 provider:
   name: aws
-  runtime: nodejs24.x
+  runtime: python3.13
   architecture: x86_64
   region: '${env:AWS_REGION}'
   versionFunctions: false
@@ -16,11 +16,9 @@ provider:
     PORTFOLIO_TABLE: '${self:service}-Portfolio'
 functions:
   api:
-    handler: src/app.app
+    handler: src/main.handler
     name: '${self:service}-API'
     timeout: 60
-    url:
-      cors: true
 resources:
   Resources:
     ExecutionRole:
@@ -92,8 +90,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 useDotenv: true
-build:
-  esbuild:
-    bundle: true
-    minify: true
-    sourcemap: false
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    slim: false
