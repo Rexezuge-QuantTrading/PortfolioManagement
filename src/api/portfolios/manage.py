@@ -1,9 +1,12 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from decimal import Decimal
+from fastapi import APIRouter, status, Depends
 from typing import List
 from src.schema.portfolios import ListPortfoliosRequest, ListPortfoliosResponse
 from src.repository.portfolio import PortfolioRepository
 from src.model.portfolio import Portfolio
 from src.core.config import settings
+from src.util.price import PriceUtil
+from src.core.constants import CASH_SYMBOL
 
 router: APIRouter = APIRouter()
 
@@ -20,15 +23,19 @@ def list_portfolios(
         settings.portfolio_table, settings.aws_region
     )
     portfolios: List[Portfolio] = portfolioRepository.get_all_portfolios()
-    ret_portfolios_map: dict[int, ListPortfoliosResponse.Portfolio] = {}
+    totalValues: dict[int, Decimal] = {}
+    retPortfolios: dict[int, ListPortfoliosResponse.Portfolio] = {}
     for p in portfolios:
-        current_total_values = (
-            Decimal(p.quantity) * Decimal(p.avgCostBasis) / Decimal(1_0000_0000)
-        )
-        if p.id in ret_portfolios_map:
-            ret_portfolios_map[p.id].totalValues += current_total_values
+        currentValue: Decimal
+        if CASH_SYMBOL == p.symbol:
+            currentValue = PriceUtil.getActualQuantity(p.quantity)
         else:
-            ret_portfolios_map[p.id] = ListPortfoliosResponse.Portfolio(
-                id=p.id, totalValues=current_total_values
-            )
-    return ListPortfoliosResponse(portfolios=list(ret_portfolios_map.values()))
+            currentValue = PriceUtil.getActualSecurityValue(p.quantity, p.avgCostBasis)
+        if p.id in totalValues:
+            totalValues[p.id] += currentValue
+        else:
+            totalValues[p.id] = currentValue
+            retPortfolios[p.id] = ListPortfoliosResponse.Portfolio(id=p.id)
+        retPortfolios[p.id].totalValue = float(totalValues[p.id])
+
+    return ListPortfoliosResponse(portfolios=list(retPortfolios.values()))

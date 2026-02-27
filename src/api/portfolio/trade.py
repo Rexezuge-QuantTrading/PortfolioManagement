@@ -7,6 +7,7 @@ from src.core.config import settings
 from src.model.portfolio import Portfolio
 from typing import List
 from src.util.price import PriceUtil
+from src.core.constants import CASH_SYMBOL
 
 router: APIRouter = APIRouter()
 
@@ -27,8 +28,8 @@ def get_portfolio(
     availableCash: Decimal = Decimal(0)
     positionsValue: Decimal = Decimal(0)
     for p in positions:
-        if "000000.CASH" == p.symbol:
-            availableCash = Decimal(p.quantity)
+        if CASH_SYMBOL == p.symbol:
+            availableCash = PriceUtil.getActualQuantity(p.quantity)
             continue
         position = GetPortfolioResponse.Position(
             symbol=p.symbol,

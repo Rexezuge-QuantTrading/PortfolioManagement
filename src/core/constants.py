@@ -1,0 +1,1 @@
+CASH_SYMBOL: str = "000000.CASH"
