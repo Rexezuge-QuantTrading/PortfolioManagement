@@ -11,6 +11,4 @@ async def root():
 
 
 app.include_router(router, prefix="/api")
-
-# Lambda 入口
 handler: Mangum = Mangum(app)
