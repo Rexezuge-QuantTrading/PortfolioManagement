@@ -14,6 +14,7 @@ provider:
   environment:
     ACTIVITY_TABLE: '${self:service}-Activity'
     PORTFOLIO_TABLE: '${self:service}-Portfolio'
+    HMAC_SECRET_KEY: '${env:HMAC_SECRET_KEY}'
 functions:
   api:
     handler: src/main.handler
