@@ -1,6 +1,6 @@
 // 当前时间戳（毫秒）
 const timestamp = Date.now();
-pm.request.headers.upsert({ key: "X-Timestamp", value: timestamp.toString() });
+pm.request.headers.upsert({ key: "Z-Timestamp", value: timestamp.toString() });
 
 // HTTP 方法
 const method = pm.request.method.toUpperCase();
@@ -18,7 +18,7 @@ const queryString = urlObj.query.all()
 let headersToSign = {};
 pm.request.headers.each(header => {
     const key = header.key.toLowerCase();
-    if (key.startsWith('x-') && key !== 'x-signature') {
+    if (key.startsWith('x-') && key !== 'z-signature') {
         headersToSign[key] = header.value;
     }
 });
@@ -54,4 +54,4 @@ const CryptoJS = require('crypto-js');
 const hmac = CryptoJS.HmacSHA256(canonical, secretKey).toString(CryptoJS.enc.Hex);
 
 // 设置 X-Signature
-pm.request.headers.upsert({ key: "X-Signature", value: hmac });
+pm.request.headers.upsert({ key: "Z-Signature", value: hmac });

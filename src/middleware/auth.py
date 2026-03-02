@@ -34,8 +34,8 @@ class AuthMiddleware:
 
         request = Request(scope, receive)
 
-        signature = request.headers.get("X-Signature")
-        timestamp_str = request.headers.get("X-Timestamp")
+        signature = request.headers.get("Z-Signature")
+        timestamp_str = request.headers.get("Z-Timestamp")
 
         if not signature or not timestamp_str:
             response = JSONResponse(
@@ -61,7 +61,7 @@ class AuthMiddleware:
         headers_to_sign = {
             k.lower(): v
             for k, v in request.headers.items()
-            if k.lower().startswith("x-") and k.lower() != "x-signature"
+            if k.lower().startswith("x-") and k.lower() != "z-signature"
         }
 
         sorted_headers = "".join(
