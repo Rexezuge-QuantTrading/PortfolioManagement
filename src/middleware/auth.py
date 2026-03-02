@@ -61,7 +61,7 @@ class AuthMiddleware:
         headers_to_sign = {
             k.lower(): v
             for k, v in request.headers.items()
-            if k.lower().startswith("x-") and k.lower() != "z-signature"
+            if k.lower().startswith("z-") and k.lower() != "z-signature"
         }
 
         sorted_headers = "".join(
