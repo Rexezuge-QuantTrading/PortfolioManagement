@@ -85,7 +85,15 @@ class AuthMiddleware:
         ).hexdigest()
 
         if not hmac.compare_digest(calculated_signature, signature):
-            response = JSONResponse({"error": "Invalid signature"}, status_code=401)
+            response = JSONResponse(
+                {
+                    "error": "Invalid signature",
+                    "debug": {
+                        "requestMessage": message.decode("utf-8"),
+                    },
+                },
+                status_code=401,
+            )
             await response(scope, receive, send)
             return
 
