@@ -1,4 +1,4 @@
-# $version: v2-1772208516
+# $version: v3-1772409948
 name: Deploy Serverless Stack
 permissions:
   contents: read
@@ -24,14 +24,6 @@ jobs:
 
       - name: Install Serverless CLI
         run: npm install -g serverless
-
-      - name: Dump DOT_ENV to Repository
-        run: |
-          if [ ! -f ".env" ]; then
-            echo "${DOT_ENV}" > .env
-          fi
-        env:
-          DOT_ENV: ${{ vars.DOT_ENV }}
 
       - name: Deploy Stack to AWS
         env:

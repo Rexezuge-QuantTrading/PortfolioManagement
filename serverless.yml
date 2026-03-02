@@ -92,7 +92,6 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-useDotenv: true
 custom:
   pythonRequirements:
     dockerizePip: true
