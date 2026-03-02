@@ -18,7 +18,7 @@ const queryString = urlObj.query.all()
 let headersToSign = {};
 pm.request.headers.each(header => {
     const key = header.key.toLowerCase();
-    if (key.startsWith('x-') && key !== 'z-signature') {
+    if (key.startsWith('z-') && key !== 'z-signature') {
         headersToSign[key] = header.value;
     }
 });

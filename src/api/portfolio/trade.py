@@ -1,5 +1,5 @@
 from decimal import Decimal
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, status
 from src.schema.portfolios import GetPortfolioResponse
 from src.schema.trade import TradeRequest, TradeResponse
 from src.repository.portfolio import PortfolioRepository
@@ -8,6 +8,7 @@ from src.model.portfolio import Portfolio
 from typing import List
 from src.util.price import PriceUtil
 from src.core.constants import CASH_SYMBOL
+from src.util.helper.trade import TradeHelper
 
 router: APIRouter = APIRouter()
 
@@ -54,22 +55,13 @@ def get_portfolio(
     status_code=status.HTTP_200_OK,
 )
 def trade(
+    portfolio_id: int,
     request: TradeRequest,
 ) -> TradeResponse:
-    print(f"request: {request}")
-    user: RemoteClient = use(
-        "ths", host="127.0.0.1", port=1430
-    ) 
-    user.buy('600000', price=10.5, amount=100)
-
-    # # 卖出
-    # user.sell('600000', price=10.8, amount=100)
-    response = TradeResponse()
-
-    if not response:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="User could not be created",
-        )
-
+    securityCode: str = TradeHelper.getValidatedSecurityCode(request.securityCode)
+    price: Decimal = Decimal(request.price) / Decimal(100)
+    quantity: int = request.quantity
+    trader: TradeHelper = TradeHelper()
+    tracking_id: str = trader.buy(securityCode, price, quantity)
+    response = TradeResponse(tracking_id=tracking_id)
     return response
